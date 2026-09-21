@@ -7,6 +7,9 @@ function LabelerDashboard() {
   const [tasks, setTasks] = useState([]);
   const [selectedTask, setSelectedTask] = useState(null);
 
+  const [acceptedTasks, setAcceptedTasks] = useState([]);
+  const [completedTasks, setCompletedTasks] = useState([]);
+
   const [accepted, setAccepted] = useState(false);
   const [reviewText, setReviewText] = useState("");
 
@@ -21,6 +24,7 @@ function LabelerDashboard() {
 
   useEffect(() => {
     loadTasks();
+    loadDashboardStats();
   }, []);
 
   async function loadTasks() {
@@ -57,45 +61,115 @@ function LabelerDashboard() {
     }
   }
 
-  async function startTask(task) {
-  try {
-    const token = localStorage.getItem("access_token");
+  async function loadDashboardStats() {
+    try {
+      const token = localStorage.getItem("access_token");
 
-    const response = await fetch(
-      `${API_URL}/assignments/${task.task_id}`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      if (!token) {
+        return;
       }
-    );
 
-    const data = await response.json();
+      // Load accepted tasks
+      const assignmentResponse = await fetch(
+        `${API_URL}/assignments/`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    if (!response.ok) {
-      throw new Error(
-        data.detail || "Unable to accept task"
+      const assignmentData = await assignmentResponse.json();
+
+      if (assignmentResponse.ok) {
+        if (Array.isArray(assignmentData)) {
+          setAcceptedTasks(assignmentData);
+        } else if (
+          assignmentData.data &&
+          Array.isArray(assignmentData.data)
+        ) {
+          setAcceptedTasks(assignmentData.data);
+        } else {
+          setAcceptedTasks([]);
+        }
+      }
+
+      // Load completed annotations
+      const annotationResponse = await fetch(
+        `${API_URL}/annotations/`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const annotationData = await annotationResponse.json();
+
+      if (annotationResponse.ok) {
+        if (Array.isArray(annotationData)) {
+          setCompletedTasks(annotationData);
+        } else if (
+          annotationData.data &&
+          Array.isArray(annotationData.data)
+        ) {
+          setCompletedTasks(annotationData.data);
+        } else {
+          setCompletedTasks([]);
+        }
+      }
+    } catch (error) {
+      console.error("Dashboard stats error:", error);
+    }
+  }
+
+  async function startTask(task) {
+    try {
+      const token = localStorage.getItem("access_token");
+
+      if (!token) {
+        setMessage("Please login first.");
+        return;
+      }
+
+      const response = await fetch(
+        `${API_URL}/assignments/${task.task_id}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.detail || "Unable to accept task"
+        );
+      }
+
+      setSelectedTask(task);
+      setAccepted(true);
+
+      await loadDashboardStats();
+
+      setMessage(
+        data.message || "Task accepted successfully!"
+      );
+
+      setAiLabel("");
+      setConfidence(null);
+      setFinalLabel("");
+      setReviewText("");
+    } catch (error) {
+      console.error(error);
+      setMessage(
+        `Task acceptance failed: ${error.message}`
       );
     }
-
-    setSelectedTask(task);
-    setAccepted(true);
-
-    setMessage(
-      data.message || "Task accepted successfully!"
-    );
-
-    setAiLabel("");
-    setConfidence(null);
-    setFinalLabel("");
-    setReviewText("");
-
-  } catch (error) {
-    console.error(error);
-    setMessage(`Task acceptance failed: ${error.message}`);
   }
-}
 
   async function getAISuggestion() {
     if (!reviewText.trim()) {
@@ -136,7 +210,9 @@ function LabelerDashboard() {
       setAiLabel(result.suggested_label || "");
       setConfidence(result.confidence ?? null);
 
-      setMessage("AI suggestion generated successfully!");
+      setMessage(
+        "AI suggestion generated successfully!"
+      );
     } catch (error) {
       console.error(error);
 
@@ -186,6 +262,11 @@ function LabelerDashboard() {
       return;
     }
 
+    if (!selectedTask) {
+      setMessage("Please select a task first.");
+      return;
+    }
+
     setLoading(true);
     setMessage("");
 
@@ -218,7 +299,12 @@ function LabelerDashboard() {
         );
       }
 
-      setMessage("Annotation submitted successfully!");
+      setMessage(
+        "Annotation submitted successfully!"
+      );
+
+      // Refresh dashboard counts
+      await loadDashboardStats();
 
       setReviewText("");
       setAiLabel("");
@@ -244,6 +330,9 @@ function LabelerDashboard() {
     setConfidence(null);
     setFinalLabel("");
     setMessage("");
+
+    loadDashboardStats();
+    loadTasks();
   }
 
   return (
@@ -277,12 +366,12 @@ function LabelerDashboard() {
 
             <div className="stat-card">
               <h3>Accepted Tasks</h3>
-              <p>{accepted ? 1 : 0}</p>
+              <p>{acceptedTasks.length}</p>
             </div>
 
             <div className="stat-card">
               <h3>Completed</h3>
-              <p>0</p>
+              <p>{completedTasks.length}</p>
             </div>
 
           </div>
@@ -294,7 +383,10 @@ function LabelerDashboard() {
 
               <button
                 className="secondary-btn"
-                onClick={loadTasks}
+                onClick={() => {
+                  loadTasks();
+                  loadDashboardStats();
+                }}
               >
                 Refresh
               </button>
