@@ -1,9 +1,11 @@
+import os
 from datetime import datetime, timedelta, timezone
 
 import jwt
+from dotenv import load_dotenv
+from jwt.exceptions import InvalidTokenError
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from jwt.exceptions import InvalidTokenError
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -12,7 +14,14 @@ from app.models.user import User
 from app.utils.security import verify_password
 
 
-SECRET_KEY = "change-this-secret-key-later"
+load_dotenv()
+
+SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+
+if not SECRET_KEY:
+    raise ValueError("JWT_SECRET_KEY is not set in .env")
+
+
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
@@ -64,9 +73,7 @@ def login(
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect email or password",
-            headers={
-                "WWW-Authenticate": "Bearer"
-            },
+            headers={"WWW-Authenticate": "Bearer"},
         )
 
     access_token = create_access_token(
@@ -87,9 +94,7 @@ def get_current_user(
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
-        headers={
-            "WWW-Authenticate": "Bearer"
-        },
+        headers={"WWW-Authenticate": "Bearer"},
     )
 
     try:
@@ -106,11 +111,7 @@ def get_current_user(
 
         user_id = int(user_id)
 
-    except (
-        InvalidTokenError,
-        ValueError,
-        TypeError,
-    ):
+    except (InvalidTokenError, ValueError, TypeError):
         raise credentials_exception
 
     user = db.get(User, user_id)

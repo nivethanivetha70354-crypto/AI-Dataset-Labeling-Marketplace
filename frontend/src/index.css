@@ -1,0 +1,454 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, Arial, sans-serif;
+  background: #f7f8fc;
+  color: #171827;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.app {
+  min-height: 100vh;
+}
+
+.navbar {
+  height: 76px;
+  padding: 0 7%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+  border-bottom: 1px solid #e9e9ef;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.brand-icon {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: #6c4cff;
+  color: white;
+  font-size: 13px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 34px;
+  color: #666879;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.nav-links a:hover {
+  color: #6c4cff;
+}
+
+.nav-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.login-btn,
+.signup-btn,
+.primary-btn,
+.secondary-btn {
+  border-radius: 10px;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 700;
+  border: 0;
+}
+
+.login-btn {
+  background: transparent;
+}
+
+.signup-btn,
+.primary-btn {
+  background: #6c4cff;
+  color: white;
+}
+
+.hero-section {
+  padding: 90px 7%;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 80px;
+  align-items: center;
+  background: linear-gradient(135deg, #f8f7ff, #ffffff);
+}
+
+.badge,
+.section-label {
+  color: #6c4cff;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.hero-content h1 {
+  max-width: 700px;
+  margin: 18px 0;
+  font-size: clamp(48px, 6vw, 76px);
+  line-height: 1.03;
+  letter-spacing: -3px;
+}
+
+.hero-content h1 span {
+  color: #6c4cff;
+}
+
+.hero-content > p {
+  max-width: 650px;
+  color: #696b7a;
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 14px;
+  margin-top: 30px;
+}
+
+.secondary-btn {
+  background: white;
+  border: 1px solid #dedee7;
+  color: #252536;
+}
+
+.stats {
+  display: flex;
+  gap: 45px;
+  margin-top: 55px;
+}
+
+.stats div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.stats strong {
+  font-size: 24px;
+}
+
+.stats small {
+  color: #77798a;
+}
+
+.hero-card {
+  padding: 30px;
+  background: white;
+  border: 1px solid #e4e4ed;
+  border-radius: 22px;
+  box-shadow: 0 25px 70px rgba(40, 32, 80, 0.12);
+}
+
+.card-header,
+.progress-row,
+.card-footer,
+.job-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-header {
+  color: #77798a;
+  font-size: 13px;
+}
+
+.status {
+  color: #16a36a;
+  font-weight: 800;
+}
+
+.hero-card h3 {
+  font-size: 27px;
+  margin: 30px 0 8px;
+}
+
+.card-description {
+  color: #77798a;
+  line-height: 1.6;
+}
+
+.progress-row {
+  margin-top: 30px;
+  font-size: 13px;
+}
+
+.progress {
+  height: 9px;
+  margin: 10px 0 28px;
+  border-radius: 20px;
+  background: #ededf4;
+  overflow: hidden;
+}
+
+.progress-bar {
+  width: 72%;
+  height: 100%;
+  background: #6c4cff;
+}
+
+.card-footer {
+  gap: 30px;
+}
+
+.card-footer div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.card-footer small {
+  color: #888a99;
+}
+
+.card-footer strong {
+  font-size: 18px;
+}
+
+.task-btn {
+  width: 100%;
+  margin-top: 25px;
+  padding: 13px;
+  border: 0;
+  border-radius: 10px;
+  background: #f0edff;
+  color: #6c4cff;
+  font-weight: 800;
+}
+
+.section {
+  padding: 90px 7%;
+  background: white;
+}
+
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  margin-bottom: 40px;
+}
+
+.section-heading h2 {
+  margin: 10px 0 0;
+  font-size: 40px;
+  letter-spacing: -1px;
+}
+
+.view-btn {
+  border: 0;
+  background: transparent;
+  color: #6c4cff;
+  font-weight: 800;
+}
+
+.job-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.job-card {
+  padding: 28px;
+  border: 1px solid #e6e6ed;
+  border-radius: 18px;
+  transition: 0.2s;
+}
+
+.job-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 35px rgba(40, 32, 80, 0.08);
+}
+
+.job-icon {
+  font-size: 32px;
+}
+
+.job-card h3 {
+  margin: 20px 0 8px;
+  font-size: 21px;
+}
+
+.job-card p {
+  min-height: 70px;
+  color: #77798a;
+  line-height: 1.5;
+}
+
+.job-info {
+  padding: 17px 0;
+  border-top: 1px solid #eeeeF3;
+  border-bottom: 1px solid #eeeeF3;
+  font-size: 13px;
+}
+
+.job-info strong {
+  color: #6c4cff;
+}
+
+.job-card button {
+  width: 100%;
+  margin-top: 18px;
+  padding: 12px;
+  border: 0;
+  border-radius: 9px;
+  background: #171827;
+  color: white;
+  font-weight: 700;
+}
+
+.how-section {
+  padding: 90px 7%;
+}
+
+.centered {
+  display: block;
+  text-align: center;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  margin-top: 55px;
+}
+
+.step-number {
+  margin-bottom: 20px;
+  color: #6c4cff;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.step h3 {
+  font-size: 19px;
+}
+
+.step p {
+  color: #77798a;
+  line-height: 1.6;
+}
+
+.cta-section {
+  margin: 30px 7% 90px;
+  padding: 70px 30px;
+  text-align: center;
+  border-radius: 24px;
+  background: #171827;
+  color: white;
+}
+
+.cta-section h2 {
+  margin: 0;
+  font-size: 42px;
+}
+
+.cta-section p {
+  color: #c7c7d2;
+  margin: 15px 0;
+}
+
+.cta-section .secondary-btn {
+  color: white;
+  background: transparent;
+  border-color: #555565;
+}
+
+footer {
+  padding: 30px 7%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  border-top: 1px solid #e7e7ed;
+}
+
+footer p {
+  color: #77798a;
+}
+
+@media (max-width: 900px) {
+  .nav-links {
+    display: none;
+  }
+
+  .hero-section {
+    grid-template-columns: 1fr;
+  }
+
+  .job-grid,
+  .steps {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .navbar {
+    padding: 0 20px;
+  }
+
+  .nav-actions .login-btn {
+    display: none;
+  }
+
+  .hero-section,
+  .section,
+  .how-section {
+    padding: 55px 20px;
+  }
+
+  .hero-content h1 {
+    font-size: 45px;
+    letter-spacing: -2px;
+  }
+
+  .stats,
+  .hero-buttons {
+    flex-wrap: wrap;
+  }
+
+  .job-grid,
+  .steps {
+    grid-template-columns: 1fr;
+  }
+
+  .section-heading {
+    display: block;
+  }
+
+  .view-btn {
+    margin-top: 20px;
+  }
+
+  footer {
+    padding: 25px 20px;
+    display: block;
+  }
+}
